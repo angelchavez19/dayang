@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-Widget appTransactionsView() {
+Widget appTransactionsView(BuildContext context) {
   return Text('Transactions');
 }

@@ -1,3 +1,4 @@
+import 'package:dayang/types.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -47,9 +48,11 @@ class DatabaseHelper {
     return await db.insert(USER_BALANCE, {'balance': balance, 'init': 1});
   }
 
-  Future<Map<String, dynamic>> getBalance() async {
+  Future<UserBalance> getBalance() async {
     final db = await database;
     List<Map<String, dynamic>> balances = await db.query(USER_BALANCE);
-    return balances.isEmpty ? {'balance': 0.0, 'init': 0} : balances.first;
+    return balances.isEmpty
+        ? UserBalance(rawUserBalance: {'balance': 0.0, 'init': true})
+        : UserBalance(rawUserBalance: balances.first);
   }
 }

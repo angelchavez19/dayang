@@ -1,10 +1,10 @@
+import 'package:dayang/types.dart';
 import 'package:flutter/material.dart';
 
 class AppProvider extends ChangeNotifier {
-  double balance;
-  bool init;
+  UserBalance userBalance;
 
-  AppProvider({required this.balance, required this.init});
+  AppProvider({required this.userBalance});
 
   ThemeMode themeMode = ThemeMode.dark;
 

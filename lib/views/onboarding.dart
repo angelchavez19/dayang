@@ -53,7 +53,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     final appProvider = Provider.of<AppProvider>(context);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (appProvider.init) {
+      if (appProvider.userBalance.init) {
         context.go('/app');
       }
     });
