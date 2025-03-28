@@ -1,5 +1,5 @@
 import 'package:dayang/ui/colors.dart';
-import 'package:dayang/views/app/home.dart';
+import 'package:dayang/views/app/home/view.dart';
 import 'package:dayang/views/app/transactions.dart';
 import 'package:flutter/material.dart';
 

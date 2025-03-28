@@ -1,15 +1,9 @@
 import 'package:dayang/helper/format_balance.dart';
 import 'package:dayang/provider/provider.dart';
 import 'package:dayang/ui/colors.dart';
+import 'package:dayang/views/app/home/overview/balance_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-Widget appHomeView(BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-    child: Column(children: [balanceOverview(context)]),
-  );
-}
 
 Widget balanceOverview(BuildContext context) {
   final appProvider = Provider.of<AppProvider>(context);
@@ -17,10 +11,10 @@ Widget balanceOverview(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       color: colorGray,
-      borderRadius: BorderRadius.all(Radius.circular(15)),
+      borderRadius: BorderRadius.all(Radius.circular(25)),
     ),
     child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
       child: Column(
         children: [
           SizedBox(
@@ -59,38 +53,6 @@ Widget balanceOverview(BuildContext context) {
                 ],
               ),
             ],
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget balanceCard(String title, String value, Color valueColor) {
-  return Container(
-    decoration: BoxDecoration(
-      color: colorGray2,
-      borderRadius: BorderRadius.all(Radius.circular(15)),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            '\$ $value',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w900,
-              color: valueColor,
-            ),
           ),
         ],
       ),
