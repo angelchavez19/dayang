@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ThemeProvider extends ChangeNotifier {
+class AppProvider extends ChangeNotifier {
+  double balance;
+  bool init;
+
+  AppProvider({required this.balance, required this.init});
+
   ThemeMode themeMode = ThemeMode.dark;
 
   void themeToogle() {
