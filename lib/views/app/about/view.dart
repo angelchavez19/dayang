@@ -5,25 +5,22 @@ class AppAboutView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("About")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildInfoTile(Icons.person, "Developer", "Angel Chávez"),
-            _buildInfoTile(Icons.brush, "Designer", "Dayanara Costa"),
-            _buildInfoTile(Icons.email, "Support", "infoangelchavez@gmail.com"),
-            _buildInfoTile(Icons.info, "App Version", "1.0.0"),
-            _buildInfoTile(Icons.code, "Made with", "Flutter & Dart"),
-            const SizedBox(height: 20),
-            const Text(
-              "This app is designed to help you manage your finances efficiently.",
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInfoTile(Icons.person, "Developer", "Angel Chávez"),
+          _buildInfoTile(Icons.brush, "Designer", "Dayanara Costa"),
+          _buildInfoTile(Icons.email, "Support", "infoangelchavez@gmail.com"),
+          _buildInfoTile(Icons.info, "App Version", "1.0.0"),
+          _buildInfoTile(Icons.code, "Made with", "Flutter & Dart"),
+          const SizedBox(height: 20),
+          const Text(
+            "This app is designed to help you manage your finances efficiently.",
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
       ),
     );
   }
