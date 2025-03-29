@@ -41,6 +41,9 @@ final ThemeData lightTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(foregroundColor: colorPrimary),
   ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: colorPrimary,
+  ),
 );
 
 final ThemeData darkTheme = ThemeData(
@@ -82,5 +85,8 @@ final ThemeData darkTheme = ThemeData(
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(foregroundColor: colorPrimary),
+  ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: colorPrimary,
   ),
 );
