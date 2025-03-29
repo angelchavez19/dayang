@@ -1,6 +1,7 @@
 import 'package:dayang/provider/provider.dart';
 import 'package:dayang/ui/transaction_form.dart';
-import 'package:dayang/views/app/transactions/transaction_item.dart';
+import 'package:dayang/views/app/transactions/builder/categories.dart';
+import 'package:dayang/views/app/transactions/builder/transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,23 +13,34 @@ class AppTransactionsView extends StatefulWidget {
 }
 
 class _AppTransactionsViewState extends State<AppTransactionsView> {
+  int filter = 0;
   late Future<void> _transactionsFuture;
+  late Future<void> _categoriesFuture;
 
   @override
   void initState() {
     super.initState();
-    _transactionsFuture = _loadTransactions();
+    _transactionsFuture = _loadTransactions(0);
+    _categoriesFuture = _loadCategories();
   }
 
-  Future<void> _loadTransactions() async {
+  Future<void> _loadTransactions(int categoryId) async {
     final appProvider = Provider.of<AppProvider>(context, listen: false);
+    if (categoryId != 0) {
+      return appProvider.updateUserTransactions(categoryId: categoryId);
+    }
     return appProvider.updateUserTransactions();
+  }
+
+  Future<void> _loadCategories() async {
+    final appProvider = Provider.of<AppProvider>(context, listen: false);
+    return appProvider.updateUserCategories();
   }
 
   Future<void> _addTransaction() async {
     await showTransactionDialog(context);
     setState(() {
-      _transactionsFuture = _loadTransactions();
+      _transactionsFuture = _loadTransactions(filter);
     });
   }
 
@@ -36,38 +48,13 @@ class _AppTransactionsViewState extends State<AppTransactionsView> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        FutureBuilder(
-          future: _transactionsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return Center(child: Text("Error: ${snapshot.error}"));
-            }
-
-            final appProvider = Provider.of<AppProvider>(
-              context,
-              listen: false,
-            );
-
-            if (appProvider.transactions.isEmpty) {
-              return const Center(child: Text("No transactions found."));
-            }
-
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),
-              child: ListView.builder(
-                itemCount: appProvider.transactions.length,
-                itemBuilder: (context, index) {
-                  return TransactionItem(
-                    transaction: appProvider.transactions[index],
-                  );
-                },
-              ),
-            );
-          },
-        ),
+        categorybuilder(filter, _categoriesFuture, (value) {
+          setState(() {
+            filter = value;
+            _transactionsFuture = _loadTransactions(value);
+          });
+        }),
+        transactionsBuilder(_transactionsFuture),
         Positioned(
           bottom: 16,
           right: 16,

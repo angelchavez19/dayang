@@ -127,17 +127,31 @@ class DatabaseHelper {
     });
   }
 
-  Future<List<UserTransaction>> getTransactions(int? limit) async {
+  Future<List<UserTransaction>> getTransactions(
+    int? limit,
+    int? categoryId,
+  ) async {
     final db = await database;
+
+    // Construcción dinámica del WHERE y LIMIT
+    String whereClause = categoryId != null ? "WHERE c.id = ?" : "";
+    String limitClause = limit != null ? "LIMIT ?" : "";
+
+    List<dynamic> queryParams = [];
+    if (categoryId != null) queryParams.add(categoryId);
+    if (limit != null) queryParams.add(limit);
 
     final List<Map<String, dynamic>> transactions = await db.rawQuery(
       '''SELECT t.id as id, description, amount, date, current_balance, name as category_name
       FROM $TRANSACTIONS_TABLE as t
       INNER JOIN $CATEGORIES_TABLE as c ON t.category_id = c.id
+      $whereClause
       ORDER BY date DESC
-      ${limit != null ? "LIMIT ?" : ""};''',
-      limit != null ? [limit] : [],
+      $limitClause;''',
+      queryParams,
     );
+
+    print(categoryId);
 
     return transactions.map((transaction) {
       return UserTransaction(rawTransaction: transaction);

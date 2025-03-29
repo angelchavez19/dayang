@@ -24,11 +24,11 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateUserTransactions({int? limit}) async {
+  Future<void> updateUserTransactions({int? limit, int? categoryId}) async {
     final db = DatabaseHelper();
     await db.database;
 
-    transactions = await db.getTransactions(limit);
+    transactions = await db.getTransactions(limit, categoryId);
     notifyListeners();
   }
 
