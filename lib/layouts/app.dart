@@ -1,6 +1,6 @@
 import 'package:dayang/ui/colors.dart';
 import 'package:dayang/views/app/home/view.dart';
-import 'package:dayang/views/app/transactions.dart';
+import 'package:dayang/views/app/transactions/view.dart';
 import 'package:flutter/material.dart';
 
 class AppLayout extends StatefulWidget {
@@ -20,7 +20,7 @@ class _AppLayoutState extends State<AppLayout> {
         backgroundColor: colorPrimary,
         title: const Text('Dayang: Track your finance'),
       ),
-      body: [AppHomeView(), appTransactionsView(context)][currentPageIndex],
+      body: [AppHomeView(), AppTransactionsView()][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
@@ -38,7 +38,7 @@ class _AppLayoutState extends State<AppLayout> {
           NavigationDestination(
             selectedIcon: Icon(Icons.swap_horiz),
             icon: Icon(Icons.swap_horiz_outlined),
-            label: 'Transaction',
+            label: 'Transactions',
           ),
         ],
       ),

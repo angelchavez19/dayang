@@ -86,4 +86,18 @@ class DatabaseHelper {
       'current_balance': userBalance.balance,
     });
   }
+
+  Future<List<UserTransaction>> getTransactions(int? limit) async {
+    final db = await database;
+
+    List<Map<String, dynamic>> transactions = await db.query(
+      TRANSACTIONS_TABLE,
+      orderBy: 'date DESC',
+      limit: limit,
+    );
+
+    return transactions.map((transaction) {
+      return UserTransaction(rawTransaction: transaction);
+    }).toList();
+  }
 }

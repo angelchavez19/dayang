@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class AppProvider extends ChangeNotifier {
   UserBalance userBalance;
+  late List<UserTransaction> transactions;
 
   AppProvider({required this.userBalance});
 
@@ -19,6 +20,14 @@ class AppProvider extends ChangeNotifier {
     await db.database;
 
     userBalance = await db.getBalance();
+    notifyListeners();
+  }
+
+  Future<void> updateUserTransactions({int? limit}) async {
+    final db = DatabaseHelper();
+    await db.database;
+
+    transactions = await db.getTransactions(limit);
     notifyListeners();
   }
 }
