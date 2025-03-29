@@ -14,6 +14,18 @@ class UserBalance {
   }
 }
 
+class UserCategory {
+  Map<String, dynamic> rawCategory;
+
+  late int id;
+  late String name;
+
+  UserCategory({required this.rawCategory}) {
+    id = rawCategory["id"];
+    name = rawCategory["name"];
+  }
+}
+
 class UserTransaction {
   Map<String, dynamic> rawTransaction;
 
@@ -22,6 +34,7 @@ class UserTransaction {
   late double amount;
   late DateTime date;
   late double currentBalance;
+  late String categoryName;
 
   UserTransaction({required this.rawTransaction}) {
     id = rawTransaction["id"];
@@ -29,5 +42,6 @@ class UserTransaction {
     amount = rawTransaction["amount"];
     date = DateTime.parse(rawTransaction["date"]);
     currentBalance = rawTransaction["current_balance"];
+    categoryName = rawTransaction["category_name"];
   }
 }

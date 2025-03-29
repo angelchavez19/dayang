@@ -33,12 +33,12 @@ class TransactionItem extends StatelessWidget {
                 ),
               ],
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                formatDateTime(transaction.date),
-                style: TextStyle(fontSize: 14),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(formatDateTime(transaction.date)),
+                Text(transaction.categoryName),
+              ],
             ),
             Align(
               alignment: Alignment.centerLeft,

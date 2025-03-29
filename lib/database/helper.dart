@@ -10,6 +10,8 @@ class DatabaseHelper {
   String USER_BALANCE = 'user_balance';
   // ignore: non_constant_identifier_names
   String TRANSACTIONS_TABLE = 'transactions';
+  // ignore: non_constant_identifier_names
+  String CATEGORIES_TABLE = 'categories';
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -35,12 +37,45 @@ class DatabaseHelper {
       );
     ''');
     await db.execute('''
+      CREATE TABLE categories (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL UNIQUE
+      );
+    ''');
+    await db.execute('''
+      INSERT INTO categories (name) VALUES 
+        ('Uncategorized'),
+        ('Salary'),
+        ('Rent/Mortgage'),
+        ('Utilities'),
+        ('Food & Groceries'),
+        ('Transportation'),
+        ('Entertainment'),
+        ('Medical'),
+        ('Savings'),
+        ('Education'),
+        ('Travel'),
+        ('Donations'),
+        ('Miscellaneous');
+    ''');
+    await db.execute('''
+      CREATE TABLE budgets (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          category_id INTEGER NOT NULL,
+          limit_amount REAL NOT NULL CHECK(limit_amount >= 0), 
+          period TEXT NOT NULL CHECK(period IN ('daily', 'weekly', 'monthly', 'yearly')),
+          FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+      );
+    ''');
+    await db.execute('''
       CREATE TABLE transactions (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           description TEXT NOT NULL,
           amount REAL NOT NULL,
           date TEXT NOT NULL,
-          current_balance REAL NOT NULL
+          current_balance REAL NOT NULL,
+          category_id INTEGER NOT NULL,
+          FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
       );
     ''');
   }
@@ -65,7 +100,11 @@ class DatabaseHelper {
         : UserBalance(rawUserBalance: balances.first);
   }
 
-  Future<void> registerTransaction(double amount, String description) async {
+  Future<void> registerTransaction(
+    double amount,
+    String description,
+    int categoryId,
+  ) async {
     final db = await database;
     final UserBalance userBalance = await getBalance();
 
@@ -84,20 +123,34 @@ class DatabaseHelper {
       'amount': amount,
       'date': DateTime.now().toString(),
       'current_balance': userBalance.balance,
+      'category_id': categoryId,
     });
   }
 
   Future<List<UserTransaction>> getTransactions(int? limit) async {
     final db = await database;
 
-    List<Map<String, dynamic>> transactions = await db.query(
-      TRANSACTIONS_TABLE,
-      orderBy: 'date DESC',
-      limit: limit,
+    final List<Map<String, dynamic>> transactions = await db.rawQuery(
+      '''SELECT t.id as id, description, amount, date, current_balance, name as category_name
+      FROM $TRANSACTIONS_TABLE as t
+      INNER JOIN $CATEGORIES_TABLE as c ON t.category_id = c.id
+      ORDER BY date DESC
+      ${limit != null ? "LIMIT ?" : ""};''',
+      limit != null ? [limit] : [],
     );
 
     return transactions.map((transaction) {
       return UserTransaction(rawTransaction: transaction);
+    }).toList();
+  }
+
+  Future<List<UserCategory>> getCategories() async {
+    final db = await database;
+
+    List<Map<String, dynamic>> categories = await db.query(CATEGORIES_TABLE);
+
+    return categories.map((category) {
+      return UserCategory(rawCategory: category);
     }).toList();
   }
 }

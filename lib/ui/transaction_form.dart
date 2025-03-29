@@ -2,6 +2,7 @@ import 'package:dayang/database/helper.dart';
 import 'package:dayang/provider/provider.dart';
 import 'package:dayang/ui/colors.dart';
 import 'package:dayang/ui/dialog.dart';
+import 'package:dayang/ui/input/categories.dart';
 import 'package:dayang/ui/input/decimal.dart';
 import 'package:dayang/ui/input/text.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 Future<void> showTransactionDialog(BuildContext context) async {
   final TextEditingController controllerAmount = TextEditingController();
   final TextEditingController controllerDescription = TextEditingController();
+  final TextEditingController controllerCategory = TextEditingController();
 
   void closeDialog() {
     Navigator.of(context).pop();
@@ -22,6 +24,7 @@ Future<void> showTransactionDialog(BuildContext context) async {
   Future<void> saveTransaction() async {
     final balance = controllerAmount.text;
     final description = controllerDescription.text;
+    final category = controllerCategory.text;
 
     if (balance.isEmpty) {
       showCustomDialog(
@@ -49,6 +52,7 @@ Future<void> showTransactionDialog(BuildContext context) async {
         'Invalid field',
         'The balance must be different from zero.',
       );
+      return;
     }
 
     if (description.isEmpty) {
@@ -57,13 +61,17 @@ Future<void> showTransactionDialog(BuildContext context) async {
         'Invalid field',
         'The description must not be empty.',
       );
+      return;
     }
+
+    int categoryId = int.parse(category);
 
     AppProvider provider = getProvider();
     final dbHelper = DatabaseHelper();
     await dbHelper.database;
-    await dbHelper.registerTransaction(currentBalance, description);
+    await dbHelper.registerTransaction(currentBalance, description, categoryId);
     await provider.updateUserBalance();
+    await provider.updateUserTransactions();
 
     closeDialog();
   }
@@ -81,6 +89,14 @@ Future<void> showTransactionDialog(BuildContext context) async {
             TextInputField(
               controller: controllerDescription,
               label: 'Description',
+            ),
+            CategoriesSelectorField(
+              controller: controllerCategory,
+              fetchCategories: () async {
+                AppProvider provider = getProvider();
+                await provider.updateUserCategories();
+                return provider.categories;
+              },
             ),
           ],
         ),
