@@ -1,4 +1,5 @@
 import 'package:dayang/ui/colors.dart';
+import 'package:dayang/views/app/about/view.dart';
 import 'package:dayang/views/app/home/view.dart';
 import 'package:dayang/views/app/transactions/view.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,12 @@ class _AppLayoutState extends State<AppLayout> {
         backgroundColor: colorPrimary,
         title: const Text('Dayang: Track your finance'),
       ),
-      body: [AppHomeView(), AppTransactionsView()][currentPageIndex],
+      body:
+          [
+            AppHomeView(),
+            AppTransactionsView(),
+            AppAboutView(),
+          ][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
@@ -39,6 +45,11 @@ class _AppLayoutState extends State<AppLayout> {
             selectedIcon: Icon(Icons.swap_horiz),
             icon: Icon(Icons.swap_horiz_outlined),
             label: 'Transactions',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.info),
+            icon: Icon(Icons.info_outline),
+            label: 'About',
           ),
         ],
       ),
