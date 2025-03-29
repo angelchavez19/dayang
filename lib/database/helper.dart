@@ -161,7 +161,11 @@ class DatabaseHelper {
   Future<List<UserCategory>> getCategories() async {
     final db = await database;
 
-    List<Map<String, dynamic>> categories = await db.query(CATEGORIES_TABLE);
+    List<Map<String, dynamic>> categories = await db.rawQuery('''
+      SELECT DISTINCT c.id, c.name 
+      FROM $CATEGORIES_TABLE as c
+      INNER JOIN $TRANSACTIONS_TABLE as t ON c.id = t.category_id;
+    ''');
 
     return categories.map((category) {
       return UserCategory(rawCategory: category);

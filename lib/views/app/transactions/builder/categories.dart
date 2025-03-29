@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 Widget categorybuilder(
   int filter,
   Future<void> categoriesFuture,
-  void Function(int value) onSelected,
+  void Function(int index, int value) onSelected,
 ) {
   return FutureBuilder(
     future: categoriesFuture,
@@ -33,7 +33,7 @@ Widget categorybuilder(
                   value: 0,
                   text: 'All',
                   isSelected: filter == 0,
-                  onSelected: onSelected,
+                  onSelected: (value) => onSelected(index, value),
                 );
               }
 
@@ -42,7 +42,7 @@ Widget categorybuilder(
                 value: category.id,
                 text: category.name,
                 isSelected: filter == index,
-                onSelected: onSelected,
+                onSelected: (value) => onSelected(index, value),
               );
             },
           ),

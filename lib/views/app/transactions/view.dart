@@ -48,9 +48,9 @@ class _AppTransactionsViewState extends State<AppTransactionsView> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        categorybuilder(filter, _categoriesFuture, (value) {
+        categorybuilder(filter, _categoriesFuture, (index, value) {
           setState(() {
-            filter = value;
+            filter = index;
             _transactionsFuture = _loadTransactions(value);
           });
         }),
