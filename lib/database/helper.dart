@@ -33,6 +33,8 @@ class DatabaseHelper {
           income REAL NOT NULL DEFAULT 0.0,
           expenses REAL NOT NULL DEFAULT 0.0
       );
+    ''');
+    await db.execute('''
       CREATE TABLE transactions (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           description TEXT NOT NULL,
@@ -52,7 +54,36 @@ class DatabaseHelper {
     final db = await database;
     List<Map<String, dynamic>> balances = await db.query(USER_BALANCE);
     return balances.isEmpty
-        ? UserBalance(rawUserBalance: {'balance': 0.0, 'init': true})
+        ? UserBalance(
+          rawUserBalance: {
+            'balance': 0.0,
+            'init': 0,
+            'income': 0.0,
+            'expenses': 0.0,
+          },
+        )
         : UserBalance(rawUserBalance: balances.first);
+  }
+
+  Future<void> registerTransaction(double amount, String description) async {
+    final db = await database;
+    final UserBalance userBalance = await getBalance();
+
+    Map<String, dynamic> data = {'balance': userBalance.balance + amount};
+
+    if (amount >= 0) {
+      data['income'] = userBalance.income + amount;
+    } else {
+      data['expenses'] = userBalance.expenses - amount;
+    }
+
+    await db.update(USER_BALANCE, data, where: 'id = 1');
+
+    await db.insert(TRANSACTIONS_TABLE, {
+      'description': description,
+      'amount': amount,
+      'date': DateTime.now().toString(),
+      'current_balance': userBalance.balance,
+    });
   }
 }

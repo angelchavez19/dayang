@@ -20,11 +20,7 @@ class _AppLayoutState extends State<AppLayout> {
         backgroundColor: colorPrimary,
         title: const Text('Dayang: Track your finance'),
       ),
-      body:
-          <Widget>[
-            appHomeView(context),
-            appTransactionsView(context),
-          ][currentPageIndex],
+      body: [AppHomeView(), appTransactionsView(context)][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {

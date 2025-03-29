@@ -20,7 +20,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     context.go('/app');
   }
 
-  void saveData() async {
+  void saveData(BuildContext context) async {
     final balance = _controllerBalance.text;
     if (balance.isEmpty) {
       showCustomDialog(
@@ -68,7 +68,10 @@ class _OnboardingViewState extends State<OnboardingView> {
             SizedBox(height: 50),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: saveData, child: Text("Save")),
+              child: ElevatedButton(
+                onPressed: () => saveData(context),
+                child: Text("Save"),
+              ),
             ),
           ],
         ),

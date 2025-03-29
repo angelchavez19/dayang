@@ -27,7 +27,7 @@ class DecimalInputField extends StatelessWidget {
       inputFormatters: formatters,
       decoration: labelInput(
         label,
-        SizedBox(
+        prefixIcon: SizedBox(
           width: 48,
           height: 48,
           child: Center(child: Text('\$', style: TextStyle(fontSize: 20))),
