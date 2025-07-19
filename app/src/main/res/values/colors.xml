@@ -1,5 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- Primary -->
+    <color name="color_primary">#0EF6CC</color>
+    <color name="color_primary_variant">#0BC8A6</color>
+
+    <!-- On Primary -->
+    <color name="color_on_primary_dark">#1B2223</color>
+    <color name="color_on_primary_light">#00332F</color>
+
+    <!-- Secondary -->
+    <color name="color_secondary">#3A4F50</color>
+
+    <!-- On Secondary -->
+    <color name="color_on_secondary_dark">#F4FEFD</color>
+    <color name="color_on_secondary_light">#FFFFFF</color>
+
+    <!-- Background -->
+    <color name="color_background_dark">#1B2223</color>
+    <color name="color_background_light">#F4FEFD</color>
+
+    <!-- On Background -->
+    <color name="color_on_background_dark">#F4FEFD</color>
+    <color name="color_on_background_light">#1B2223</color>
+
+    <!-- Surface -->
+    <color name="color_surface_dark">#2A3334</color>
+    <color name="color_surface_light">#FFFFFF</color>
+
+    <!-- On Surface -->
+    <color name="color_on_surface_dark">#F4FEFD</color>
+    <color name="color_on_surface_light">#1B2223</color>
+
+    <!-- Error -->
+    <color name="color_error">#FF5C5C</color>
+    <color name="color_on_error_dark">#1B2223</color>
+    <color name="color_on_error_light">#FFFFFF</color>
+
+    <!-- Extra colors -->
+    <color name="color_success">#2EFFA2</color>
+    <color name="color_warning">#FFC300</color>
+    <color name="color_info">#4AC6FF</color>
+    <color name="color_divider_dark">#2F3D3D</color>
+    <color name="color_divider_light">#CCCCCC</color>
+
 </resources>
