@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Dayang: Track your Finances</string>
+    <string name="logo">Dayang Logo</string>
+
+    <!-- Presentation -->
+    <string name="welcome">Dayang</string>
+    <string name="get_started">Get Started</string>
+    <string name="branding">Your personal finance tracker</string>
 </resources>
