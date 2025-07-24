@@ -2,6 +2,7 @@ package com.dastudios.dayang.database
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.annotation.NonNull
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.room.Database
 import androidx.room.Room
@@ -12,7 +13,6 @@ import com.dastudios.dayang.schemas.Account
 import com.dastudios.dayang.schemas.Balance
 import com.dastudios.dayang.schemas.Budget
 import com.dastudios.dayang.schemas.Category
-import com.dastudios.dayang.schemas.CategoryTagCrossRef
 import com.dastudios.dayang.schemas.Preferences
 import com.dastudios.dayang.schemas.Reminder
 import com.dastudios.dayang.schemas.Security
@@ -23,7 +23,6 @@ import com.dastudios.dayang.schemas.dao.AccountDao
 import com.dastudios.dayang.schemas.dao.BalanceDao
 import com.dastudios.dayang.schemas.dao.BudgetDao
 import com.dastudios.dayang.schemas.dao.CategoryDao
-import com.dastudios.dayang.schemas.dao.CategoryTagDao
 import com.dastudios.dayang.schemas.dao.PreferencesDao
 import com.dastudios.dayang.schemas.dao.ReminderDao
 import com.dastudios.dayang.schemas.dao.SecurityDao
@@ -31,6 +30,7 @@ import com.dastudios.dayang.schemas.dao.TagDao
 import com.dastudios.dayang.schemas.dao.TransactionDao
 import com.dastudios.dayang.schemas.dao.TransactionWithTagsDao
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(
@@ -44,8 +44,7 @@ import kotlinx.coroutines.launch
         Category::class,
         Tag::class,
         Transaction::class,
-        TransactionTagCrossRef::class,
-        CategoryTagCrossRef::class
+        TransactionTagCrossRef::class
     ],
     version = 1
 )
@@ -60,8 +59,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun tagDao(): TagDao
     abstract fun transactionDao(): TransactionDao
     abstract fun transactionWithTagsDao(): TransactionWithTagsDao
-    abstract fun categoryTagDao(): CategoryTagDao
-
 
     companion object {
         @Volatile
@@ -69,18 +66,18 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getInstance(context: Context, scope: CoroutineScope): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val callback = AppDatabaseCallback(scope)
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
+                    context,
                     AppDatabase::class.java,
                     "finance_db"
                 )
                     .addCallback(object : RoomDatabase.Callback() {
-                        @SuppressLint("RestrictedApi")
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            scope.launch {
-                                callback.populateDatabase(instance)
+
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val appCallback = AppDatabaseCallback(scope)
+                                appCallback.prepopulateDatabase(db as AppDatabase)
                             }
                         }
                     })
